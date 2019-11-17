@@ -1,6 +1,7 @@
 import "./styles.css";
 import { getSeachNode, getListNode, getItem } from "./components/element-creator";
 import { data } from "./data.js";
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
 
 const searchIntputNode = getSeachNode();
 const listNode = getListNode();
@@ -42,11 +43,12 @@ function updateListAfterKeypress() {
 
 searchInput.addEventListener("keydown", updateListAfterKeypress);
 
+let scrollAnchor = document.querySelector(".list-app").scrollTop;
 
-let windowRelativeBottom = document.documentElement.scrollHeight;
 document.querySelector(".list-app").addEventListener('scroll', function () {
-    if (windowRelativeBottom < document.documentElement.clientHeight + 100) {
+    if (scrollAnchor < document.querySelector(".list-app").scrollTop - 11) {
+        scrollAnchor = document.querySelector(".list-app").scrollTop
         addirionalItemLoading();
-      }
+    }
 });
 
