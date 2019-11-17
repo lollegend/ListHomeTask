@@ -12,43 +12,38 @@ document.querySelector(".list-app").append(listNode);
 const searchInput = searchIntputNode.querySelector(".search-input_task-input");
 
 let actualList = data;
-let loadedNumber = 30;
-const loadStep = 1;
+let loadedNumber = 0;
+const loadStep = 30;
+const elementSize = 20;
 
 const filterList = (str) => {
     actualList = data.filter(element => element.includes(str))
 };
 
-function updateList() {
-    [...document.querySelectorAll(".item")].forEach(element => element.remove());
+function ItemLoading(firstNumber,secondNumber) {
     actualList
-        .slice(0, 29)
+        .slice(firstNumber, firstNumber + secondNumber)
         .forEach(element => listNode.append(getItem(element)));
-    loadedNumber = 30;
-};
-
-updateList("");
-
-function addirionalItemLoading() {
-    actualList
-        .slice(loadedNumber, loadedNumber + loadStep)
-        .forEach(element => listNode.append(getItem(element)));
-    loadedNumber += loadStep;
+    loadedNumber += secondNumber;
 }
 
 function updateListAfterKeypress() {
-    filterList(searchInput.value)
-    updateList();
+    filterList(searchInput.value);
+    [...document.querySelectorAll(".item")].forEach(element => element.remove());
+    ItemLoading(0,29);
 }
 
 searchInput.addEventListener("keydown", updateListAfterKeypress);
 
-let scrollAnchor = document.querySelector(".list-app").scrollTop;
+let scrollAnchor = document.querySelector(".list-app").scrollTop
+    - document.querySelector(".list-app").offsetHeight;
 
-document.querySelector(".list-app").addEventListener('scroll', function () {
-    if (scrollAnchor < document.querySelector(".list-app").scrollTop - 11) {
-        scrollAnchor = document.querySelector(".list-app").scrollTop
-        addirionalItemLoading();
+document.querySelector(".list-app").addEventListener('scroll', e => {
+    const { scrollTop } = e.target;
+    if (scrollAnchor < scrollTop - elementSize * (loadStep - 2)) {
+        scrollAnchor = scrollTop;
+        ItemLoading(loadedNumber,loadStep);
     }
 });
 
+ItemLoading(0,29);
