@@ -1,7 +1,8 @@
 import "./styles.css";
-import { getSeachNode, getListNode, getItem } from "./components/element-creator";
+import { getSeachNode, getListNode } from "./components/element-creator.js";
 import { data } from "./data.js";
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
+import { filterList } from "./components/filter.js";
+import { ItemLoading } from "./components/elements-loader.js";
 
 const searchIntputNode = getSeachNode();
 const listNode = getListNode();
@@ -16,21 +17,10 @@ let loadedNumber = 0;
 const loadStep = 30;
 const elementSize = 20;
 
-const filterList = (str) => {
-    actualList = data.filter(element => element.includes(str))
-};
-
-function ItemLoading(firstNumber,secondNumber) {
-    actualList
-        .slice(firstNumber, firstNumber + secondNumber)
-        .forEach(element => listNode.append(getItem(element)));
-    loadedNumber += secondNumber;
-}
-
 function updateListAfterKeypress() {
-    filterList(searchInput.value);
+    actualList = filterList(searchInput.value, data);
     [...document.querySelectorAll(".item")].forEach(element => element.remove());
-    ItemLoading(0,29);
+    ItemLoading(0,29, actualList, listNode);
 }
 
 searchInput.addEventListener("keydown", updateListAfterKeypress);
@@ -42,8 +32,8 @@ document.querySelector(".list-app").addEventListener('scroll', e => {
     const { scrollTop } = e.target;
     if (scrollAnchor < scrollTop - elementSize * (loadStep - 2)) {
         scrollAnchor = scrollTop;
-        ItemLoading(loadedNumber,loadStep);
+        ItemLoading(loadedNumber,loadStep, actualList, listNode);
     }
 });
 
-ItemLoading(0,29);
+ItemLoading(0,29, actualList, listNode);
