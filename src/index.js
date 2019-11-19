@@ -27,9 +27,11 @@ searchIntputNode.querySelector(".search-input_task-input")
 app.addEventListener('scroll', e => {
     const { scrollTop, scrollHeight, offsetHeight } = e.target;
     if (scrollHeight - elementSize * elementPreloadBorder < (scrollTop + offsetHeight)) {
-        itemLoader.itemLoading([...document.querySelectorAll(".item")].length
-            , loadStep
-            , listNode);
+        itemLoader.itemLoading(
+            [...document.querySelectorAll(".item")].length,
+            loadStep,
+            listNode
+        );
     }
 });
 
