@@ -7,9 +7,9 @@ export function itemLoadingApi() {
 
     const filterList = (str) => currentData = data.filter(element => element.includes(str));
 
-    function itemLoading(firstNumber, secondNumber, node) {
+    function itemLoading(beginIndex, elementsNumber, node) {
         currentData
-            .slice(firstNumber, firstNumber + secondNumber)
+            .slice(beginIndex, beginIndex + elementsNumber)
             .forEach(element => node.append(getItem(element)));
     }
 
